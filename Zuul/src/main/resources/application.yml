@@ -1,0 +1,36 @@
+#服务器端口配置
+server:
+  port: 8082
+ 
+#服务器安全配置
+spring:
+  application: 
+    name: zuul-server 
+    
+#Eureka配置
+eureka:
+  instance:
+    prefer-ip-address: true #访问的路径变为 IP 地址
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} #使得服务实例在eureka界面增加显示版本号
+    lease-renewal-interval-in-seconds: 5  #心跳
+    lease-expiration-duration-in-seconds: 15
+  client:
+    register-with-eureka: true # 是否作为一个Eureka Client 注册到Eureka Server上去
+    fetch-registry: true # 是否需要从Eureka Server上拉取注册信息到本地(决定Eureka服务端集群是否自动同步)。
+    service-url:
+      defaultZone: http://root:123456@127.0.0.1:8081/eureka/
+   
+zuul:
+  routes:
+    web: 
+      path: /web/*
+      service-id: web-server
+    user:   
+      path: /user/*
+      service-id: user-server
+    ratelimit: #网关限流
+      enabled: false  #关闭
+      behind-proxy: true
+      default-policy:
+        limit: 100
+        type: ORIGIN

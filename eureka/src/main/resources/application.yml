@@ -1,0 +1,28 @@
+#服务器端口配置
+server:
+  port: 8081
+ 
+#服务器安全配置
+spring:
+  application: 
+    name: eureka-server 
+  security:
+    user:
+      name: root
+      password: 123456
+    
+#Eureka配置
+eureka:
+  instance: #实例配置
+    prefer-ip-address: true  #是否将ip地址设为访问路径
+    instance-id: ${spring.cloud.client.ip-address}:${server.port} #使得服务实例在eureka界面增加显示版本号
+    hostname: eureka-server #设置主机名称
+  server: #服务器端设置
+    enable-self-preservation: false #是否开启保护模式
+    use-read-only-response-cache: true #是否开启缓存
+  client: #客户端设置
+    register-with-eureka: true #是否向注册中心注册自己
+    fetch-registry: true #是否能从注册中心获取信息
+    service-url: #Eureka服务地址
+      defaultZone: http://root:123456@127.0.0.1:8081/eureka/ #客户端注册地址
+   
